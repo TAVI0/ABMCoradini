@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->widgetEncontrado->hide();
     ui->widgetAdicional->hide();
     ui->widgetCantidad->hide();
+    ui->widgetSemanas->hide();
 
     ui->widgetAuxiliar->hide();
 
@@ -282,14 +283,7 @@ void MainWindow::on_ButtonBuscarID_clicked()
     QString renglon;
 
     QString direccion="inventario.txt";
-    /*
-    if(ui->labelMenuTitulo->text()=="BUSCAR"){
-    direccion="inventario.txt";
-    }
-    if(ui->labelMenuTitulo->text()=="VENDER"){
-    direccion="cloninvent.txt";
-    }
-*/
+
 
     QFile arch(direccion);
     if (ui->lineBuscarID->text().isEmpty()){
@@ -347,14 +341,7 @@ void MainWindow::on_ButtonBuscarCodbarras_clicked()
     QString renglon;
 
     QString direccion="inventario.txt";
-    /*
-    if(ui->labelMenuTitulo->text()=="BUSCAR"){
-    direccion="inventario.txt";
-    }
-    if(ui->labelMenuTitulo->text()=="VENDER"){
-    direccion="cloninvent.txt";
-    }
-*/
+
     QFile arch(direccion);
     if (ui->lineBuscarCodbarras->text().isEmpty()){
         QMessageBox::warning(0,"Alerta","INGRESE UN CODIGO DE BARRAS PARA BUSCAR");
@@ -511,10 +498,7 @@ void MainWindow::on_ButtonEncontradoModificar_clicked()
         ui->widgetCantidad->setGeometry(250,50,260,130);
         ui->labelCantidadTotal->setText(ui->lebelEncontradoCantidad->text());
 
-
-        QFile arch("venta.txt");
-        if (arch.open(QIODevice::ReadOnly|QIODevice::Text)) {
-}}}
+    }}
 
 void MainWindow::on_ButtonEncontradoAtras_clicked()
 {
@@ -546,14 +530,6 @@ void MainWindow::on_ButtonMenuVer_clicked()
     double pag=0;
 
     QString direccion="inventario.txt";
-    /*
-    if(ui->labelMenuTitulo->text()=="BUSCAR"){
-    direccion="inventario.txt";
-    }
-    if(ui->labelMenuTitulo->text()=="VENDER"){
-    direccion="cloninvent.txt";
-    }
-*/
 
     QFile archaux(direccion);
     if (archaux.open(QIODevice::ReadOnly|QIODevice::Text)){
@@ -1228,6 +1204,7 @@ void MainWindow::on_ButtonMenuVender_clicked()
     ui->ButonMenuAgregar->hide();
     ui->ButtonMenuVender->hide();
 
+    ui->labelVenderTotal->setNum(0);
     ui->widgetLista->hide();
     ui->widgetBuscar->hide();
     ui->widgetVender->show();
@@ -1273,6 +1250,7 @@ void MainWindow::on_ButtonVenderAgregar_clicked()
 void MainWindow::on_ButtonCantidadCancelar_clicked()
 {
     ui->widgetCantidad->hide();
+    ui->labelCantidadSeleccion->setNum(0);
 }
 
 void MainWindow::on_ButtonCantidadAceptar_2_clicked()
@@ -1312,6 +1290,9 @@ void MainWindow::on_ButtonCantidadAceptar_clicked()
         out<<total<<"$\n";
         out<<"---\n";
         archticket.close();
+
+        int numtotal= ui->labelVenderTotal->text().toInt()+total;
+        ui->labelVenderTotal->setNum(numtotal);
 }
     QFile archaux("ticket.txt");
     if (archaux.open(QIODevice::ReadOnly|QIODevice::Text)) {
@@ -1358,9 +1339,10 @@ void MainWindow::on_ButtonCantidadAceptar_clicked()
             arch2.close();
             arch.remove();
             arch2.rename("inventario.txt");
-
-
-}}}
+}
+    ui->labelCantidadSeleccion->setNum(0);
+    }
+}
 
 void MainWindow::on_ButtonVenderCancelar_clicked()
 {
@@ -1462,11 +1444,48 @@ void MainWindow::on_ButtonMenuSalir_clicked()
 
 void MainWindow::on_ButtonVenderImprimir_clicked()
 {
+    QFile archticket("ticket.txt");
+    if (archticket.open(QIODevice::Append|QIODevice::Text)) {
+            QTextStream out (&archticket);
+            out<<"Total: "<<"\t"<<ui->labelVenderTotal->text()<<"$\n";
+            out<<"---\n";
+
+            archticket.close();
+    }
+
+    QFile archaux("ticket.txt");
+    if (archaux.open(QIODevice::ReadOnly|QIODevice::Text)) {
+        ui->TextVenderTicket->setPlainText(archaux.readAll());
+        archaux.close();
+}
+    QFile archa("ticket.txt");
+    QFile archtotal("ventastotales.txt");
+
+    if (archa.open(QIODevice::ReadOnly|QIODevice::Text) && archtotal.open(QIODevice::Append|QIODevice::Text)) {
+        QTextStream out (&archtotal);
+        out<<archa.readAll()<<"\n";
+        archa.close();
+        archtotal.close();
+}
+
     QPrinter printer(QPrinter::HighResolution);
     QPrintDialog printDialog(&printer, NULL);
     if (printDialog.exec() == QDialog::Accepted) {
         ui->TextVenderTicket->print(&printer);
     }
+
+    ui->widgetLista->hide();
+    ui->widgetBuscar->hide();
+    ui->widgetVender->hide();
+    ui->widgetAgregar->hide();
+    ui->widgetEncontrado->hide();
+    ui->widgetAdicional->hide();
+    ui->widgetCantidad->hide();
+    ui->widgetSemanas->hide();
+    ui->ButtonMenuBuscar->show();
+    ui->ButonMenuAgregar->show();
+    ui->ButtonMenuVender->show();
+
 }
 
 void MainWindow::on_ButtonSemanasMenos_clicked()
@@ -1480,7 +1499,64 @@ void MainWindow::on_ButtonSemanasMenos_clicked()
 void MainWindow::on_ButtonSemanasMas_clicked()
 {
     int cantNum=ui->labelSemanasCantidad->text().toInt();
-    if(cantNum>0){
-        cantNum--;
+    if(cantNum>=0){
+        cantNum++;
         ui->labelSemanasCantidad->setNum(cantNum);
 }}
+
+void MainWindow::on_ButtonMenuVender_2_clicked()
+{
+    ui->widgetSemanas->show();
+    ui->widgetSemanas->setGeometry(250,50,260,130);
+}
+
+void MainWindow::on_ButtonCantidadCancelar_2_clicked()
+{
+    ui->widgetSemanas->hide();
+    ui->labelSemanasCantidad->setNum(0);
+}
+
+void MainWindow::on_ButtonCantidadAceptar_4_clicked()
+{
+    QFile archticket("ticket.txt");
+    if (archticket.open(QIODevice::Append|QIODevice::Text)) {
+            QTextStream out (&archticket);
+            out<<"Total: "<<"\t"<<ui->labelVenderTotal->text()<<"$\n";
+            out<<"Presupuesto valido por: "<<ui->labelSemanasCantidad->text()<<"semanas. \n";
+            out<<"---\n";
+
+            archticket.close();
+    }
+
+    QFile archaux("ticket.txt");
+    if (archaux.open(QIODevice::ReadOnly|QIODevice::Text)) {
+        ui->TextVenderTicket->setPlainText(archaux.readAll());
+        archaux.close();
+}
+
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintDialog printDialog(&printer, NULL);
+    if (printDialog.exec() == QDialog::Accepted) {
+        ui->TextVenderTicket->print(&printer);
+    }
+
+    QFile arch("inventario.txt");
+    QFile arch2("cloninvent.txt");
+    arch.remove();
+    arch2.rename("inventario.txt");
+    QMessageBox::warning(0,"Aviso","SE HA DEVUELTO EL STOCK");
+
+    ui->widgetLista->hide();
+    ui->widgetBuscar->hide();
+    ui->widgetVender->hide();
+    ui->widgetAgregar->hide();
+    ui->widgetEncontrado->hide();
+    ui->widgetAdicional->hide();
+    ui->widgetCantidad->hide();
+    ui->widgetSemanas->hide();
+    ui->ButtonMenuBuscar->show();
+    ui->ButonMenuAgregar->show();
+    ui->ButtonMenuVender->show();
+
+}
+

@@ -95,6 +95,9 @@
      <property name="styleSheet">
       <string notr="true">background-color: rgb(255, 255, 255);</string>
      </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Password</enum>
+     </property>
     </widget>
     <widget class="QPushButton" name="ButtonLoginIngresar">
      <property name="geometry">
@@ -3351,6 +3354,25 @@
       <string>de</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_70">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>10</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Courier New</family>
+       <pointsize>13</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>cantidad</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="widgetSemanas" native="true">
     <property name="geometry">
@@ -3406,7 +3428,7 @@
       <string notr="true">background-color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string>AGREGAR</string>
+      <string>IMPRIMIR</string>
      </property>
     </widget>
     <widget class="QPushButton" name="ButtonSemanasMas">
@@ -3560,10 +3582,6 @@
   <tabstop>ButtonBuscarCancelar_5</tabstop>
   <tabstop>ButtonBuscarCancelar_3</tabstop>
   <tabstop>dateEdit</tabstop>
-  <tabstop>ButtonBuscarCancelar_4</tabstop>
-  <tabstop>lineBuscarCodbarras_3</tabstop>
-  <tabstop>lineBuscarID_3</tabstop>
-  <tabstop>lineBuscarNombre_3</tabstop>
   <tabstop>TextVenderTicket</tabstop>
  </tabstops>
  <resources/>

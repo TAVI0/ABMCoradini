@@ -88,6 +88,12 @@ private slots:
 
     void on_ButtonSemanasMas_clicked();
 
+    void on_ButtonMenuVender_2_clicked();
+
+    void on_ButtonCantidadCancelar_2_clicked();
+
+    void on_ButtonCantidadAceptar_4_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
